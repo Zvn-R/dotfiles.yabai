@@ -1,0 +1,83 @@
+#!/usr/bin/env sh
+
+# --- General Settings ---
+# Use binary space partitioning layout
+yabai -m config layout bsp
+
+# --- Tiling & Padding ---
+# No window gaps (outer padding)
+yabai -m config window_gap 0
+# No padding around the content of windows (inner padding)
+yabai -m config top_padding 0
+yabai -m config bottom_padding 0
+yabai -m config left_padding 0
+yabai -m config right_padding 0
+
+# Ensure no visual borders are added by Yabai
+yabai -m config window_border_width 0
+
+# --- Mouse Behavior ---
+# Set 'ctrl' as the modifier key for mouse actions
+yabai -m config mouse_modifier ctrl
+# Left click + ctrl drag to move windows
+yabai -m config mouse_action1 move
+# Right click + ctrl drag to resize windows
+yabai -m config mouse_action2 resize
+
+# Focus window under mouse cursor without raising it
+yabai -m config focus_follows_mouse autofocus
+# Ensure windows are not automatically raised when focused by mouse hover
+yabai -m config auto_raise off # This is often default when focus_follows_mouse is on
+
+# Warp mouse cursor to the center of the focused window when focus changes via keyboard/cmd+tab
+yabai -m config mouse_follows_focus on
+
+# --- Window Management Rules (Exclusions) ---
+# Do not tile Quick Look previews (for files and photos)
+yabai -m rule --add app="^QuickLookUIService$" manage=off
+yabai -m rule --add app="^com.apple.quicklook.QuickLookUIService$" manage=off # Alternate identifier
+
+# Do not tile System Settings
+yabai -m rule --add app="^System Settings$" manage=off
+yabai -m rule --add app="^com.apple.systemsettings$" manage=off # For macOS Ventura and later
+yabai -m rule --add app="^System Preferences$" manage=off # For older macOS versions
+yabai -m rule --add app="^com.apple.systempreferences$" manage=off # For older macOS versions
+
+# Do not tile Spotify
+yabai -m rule --add app="^Spotify$" manage=off
+yabai -m rule --add app="^com.spotify.client$" manage=off
+
+#Do not tile FaceTime
+yabai -m rule --add app="FaceTime" manage=off
+
+#Do not tile Clock
+yabai -m rule --add app="Clock" manage=off
+
+# General rule for common dialogs/pop-ups (you might need to refine this by observing window properties)
+yabai -m rule --add window_role="^AXDialog$" manage=off
+yabai -m rule --add window_role="^AXSheet$" manage=off
+yabai -m rule --add is_floating="true" manage=off # Often good for generic pop-ups
+
+# Do not tile WhatsApp
+yabai -m rule --add app="^WhatsApp$" manage=off
+yabai -m rule --add app="^com.whatsapp.*$" manage=off
+
+# Do not tile Discord
+yabai -m rule --add app="^Discord$" manage=off
+yabai -m rule --add app="^com.hnc.Discord$" manage=off
+
+# Do not tile Apple Notes
+yabai -m rule --add app="^Notes$" manage=off
+yabai -m rule --add app="^com.apple.Notes$" manage=off
+
+# Do not tile Reminders
+yabai -m rule --add app="^Reminders$" manage=off
+yabai -m rule --add app="^com.apple.reminders$" manage=off
+
+
+# Ensure Yabai restarts and applies new settings
+# This isn't strictly needed in the config itself but ensures yabai is running.
+# If yabai is managed by brew services, this line isn't critical here.
+# pkill -x yabai && yabai & # Optional: uncomment if you want to force restart from config (less common)
+
+echo "Yabai configuration loaded" #(Optional: for debugging)
